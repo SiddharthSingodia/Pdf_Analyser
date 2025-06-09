@@ -3,10 +3,9 @@ import { v } from "convex/values";
 import { Users } from "lucide-react";
 
 export default defineSchema({
-    Users: defineTable({
+    users: defineTable({
         userName: v.string(),
         email: v.string(),
         imageUrl: v.string(),
-        
     })
-})
+});
