@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Layout, Shield } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
+import UploadPdfDialog from './UploadPdfDialog'
 
 export default function SideBar() {
   return (
@@ -10,8 +11,9 @@ export default function SideBar() {
         <Image src={"/logo.svg"} alt="logo" width={120} height={120} />
     
     <div className='mt-10'>
+        <UploadPdfDialog>
         <Button className='w-full'>Upload PDF</Button>
-
+        </UploadPdfDialog>
         <div className='flex gap-2 items-center mt-10 hover:bg-slate-100 rounded-md p-2 cursor-pointer'>
           <Layout/>
           <h2>Workspace</h2>
@@ -28,4 +30,4 @@ export default function SideBar() {
     </div>
     </div>
   )
-}  
+}   
