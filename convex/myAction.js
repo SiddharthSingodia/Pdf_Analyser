@@ -6,7 +6,7 @@ import { TaskType } from "@google/generative-ai";
 import { v } from "convex/values";
 
 // TODO: Move API key to environment variable in production
-const GOOGLE_API_KEY = 'AIzaSyCqhDRwkG1v5et_O7yJCJkuTl_ZeJkhf6w';
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
 export const ingest = action({
   args: {
@@ -18,7 +18,7 @@ export const ingest = action({
       args.splitText,
       args.splitText.map(() => ({ fileId: args.fileId })),
       new GoogleGenerativeAIEmbeddings({
-        apiKey: GOOGLE_API_KEY,
+        apiKey: GEMINI_API_KEY,
         model: "text-embedding-004", // 768 dimensions
         taskType: TaskType.RETRIEVAL_DOCUMENT,
         title: "Document title",
@@ -37,7 +37,7 @@ export const search = action({
   handler: async (ctx, args) => {
     const vectorStore = new ConvexVectorStore(
       new GoogleGenerativeAIEmbeddings({
-        apiKey: GOOGLE_API_KEY,
+        apiKey: GEMINI_API_KEY,
         model: "text-embedding-004", // 768 dimensions
         taskType: TaskType.RETRIEVAL_DOCUMENT,
         title: "Document title"})

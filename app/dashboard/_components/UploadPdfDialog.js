@@ -19,7 +19,7 @@ import {
   import { useUser } from '@clerk/clerk-react';
   import axios from 'axios';
   import { useAction } from 'convex/react'; 
-
+  import { toast } from 'sonner';
 
  
  // import { v4 as uuidv4 } from 'uuid';
@@ -30,7 +30,7 @@ const ACCEPTED_FILE_TYPES = 'application/pdf';
 
 
 
-export default function UploadPdfDialog({children}) {
+export default function UploadPdfDialog({children,isMaxFile}) {
     const generateUploadUrl = useMutation(api.fileStorage.generateUploadUrl);
     const AddFileEntry=useMutation(api.fileStorage.AddFileEntryToDb);
    const getFileUrl=useMutation(api.fileStorage.getFileUrl);
@@ -84,14 +84,14 @@ export default function UploadPdfDialog({children}) {
       setLoading(false);
       setOpen(false);
 
-
+       toast.success('File uploaded successfully');
 
       }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
-      <Button onClick={()=>setOpen(true)} className='w-full'> +Uplaod the pdf file</Button>
+        <Button onClick={()=>setOpen(true)} disabled={isMaxFile} className='w-full'> +Uplaod the pdf file</Button>
         
     </DialogTrigger>
     <DialogContent>

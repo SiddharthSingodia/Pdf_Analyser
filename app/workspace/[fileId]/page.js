@@ -18,12 +18,12 @@ export default function Workspace() {
     },[FileInfo])
    
   return (
-    <div>
-        <WorkspaceHeader/>
+    <div>   
+        <WorkspaceHeader fileName={FileInfo?.fileName}/>
         <div className='grid grid-cols-2 gap-5'>
             <div>
                 {/* text editor */}
-                <TextEditior/>
+                <TextEditior fileId={fileId}/>
             </div>
             <div>
                 {/* pdf viewer */}

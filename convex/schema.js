@@ -7,12 +7,13 @@ export default defineSchema({
         userName: v.string(),
         email: v.string(),
         imageUrl: v.string(),
+        upgrade:v.boolean(),
     }),
 
     pdfFiles: defineTable({
         fileId:v.string(),
         fileName:v.string(),
-        storageId:v.string(),
+        storageId: v.id("_storage"),
         fileUrl:v.string(),
         createdBy:v.string()
     }),
@@ -25,4 +26,10 @@ export default defineSchema({
         vectorField: "embedding",
         dimensions: 768,
       }),
+
+      notes: defineTable({
+        fileId:v.string(),
+        notes:v.string(),
+        createdBy:v.string()
+      }) 
 }); 

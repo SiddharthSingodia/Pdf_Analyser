@@ -2,15 +2,24 @@
 import { Bold, Highlighter, Italic, Sparkles, Underline } from 'lucide-react';
 import React from 'react'
 import { api } from '@/convex/_generated/api'
-import { useAction } from 'convex/react'
+import { useAction, useMutation } from 'convex/react'
 import { useParams } from 'next/navigation'
 import { chatSession } from '@/configs/AIModel'
+import { toast } from 'sonner'
+import { useUser } from '@clerk/clerk-react'
 
 
-export default function EditorExtension({editor}) {
+export default function  EditorExtension({editor}) {
   const {fileId}= useParams()
   const SearchAI= useAction(api.myAction.search)
+  const saveNotes= useMutation(api.notes.addNotes)
+  const {user}= useUser()
+
+  // console.log("User object:", user);
+  // console.log("User email:", user?.emailAddresses?.[0]?.emailAddress);
+
   const onAiClick = async () => {
+    toast("AI is working...")
     const selectedText= editor.state.doc.textBetween(editor.state.selection.from,
        editor.state.selection.to,
         " ")
@@ -32,6 +41,18 @@ export default function EditorExtension({editor}) {
         const FinalAns= AiModelResult.response.text().replace('```html','').replace('```','');
         const AllText= editor.getHTML();
         editor.commands.setContent(AllText+'<p> <strong>Answer:</strong> '+FinalAns+'</p>')
+
+        const userEmail = user?.emailAddresses?.[0]?.emailAddress;
+         console.log("Attempting to save notes with email:", userEmail);
+        if (!userEmail) {
+           console.error("User email not found. User object:", user);
+          return;
+        }
+        await saveNotes({
+          notes: editor.getHTML(),
+          fileId: fileId,
+          createdBy: userEmail
+        });
       }
       
    

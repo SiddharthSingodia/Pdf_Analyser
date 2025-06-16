@@ -1,5 +1,5 @@
 import { v } from 'convex/values'
-import { mutation } from './_generated/server'
+import { mutation,query } from './_generated/server'
 
 export const createUser = mutation({
     args: {
@@ -17,9 +17,40 @@ export const createUser = mutation({
                 email: args.email,
                 userName: args.userName,
                 imageUrl: args.imageUrl,
+                upgrade:false,
             });
             return 'inserted new user';
         }
         return 'user already exists';
+    }
+})
+
+export const userUpgradePlan = mutation({
+    args: {
+        userEmail:v.string(),
+    },
+    handler: async (ctx, args) => {
+        const result = await ctx.db.query('users').filter((q) => q.eq(q.field('email'), args.userEmail)).collect();
+        if (result.length === 0) {
+            return 'user not found';
+        }
+            await ctx.db.patch(result[0]._id, { upgrade: true });
+        return 'user upgraded';
+    }
+})
+
+export const GetUserInfo=query({
+    args:{
+        userEmail:v.optional(v.string()),
+    },
+    handler:async(ctx,args)=>{
+        if(!args.userEmail){
+            return 'user email is required';
+        }
+        const result=await ctx.db.query('users').filter((q)=>q.eq(q.field('email'),args?.userEmail)).collect();
+        if(result.length===0){
+            return 'user not found';
+        }
+        return result[0];
     }
 })
